@@ -60,6 +60,29 @@ class TodoController {
             next(error);
         }
     }
+
+    // == изменение задачи ==
+    async updateTodo(req, res, next) {
+        try {
+            const id = req.params.id;
+            const { text, deadline } = req.body;
+            const updatedTodo = await todoService.updateTodo(id, { text, deadline });
+            if (!updatedTodo) {
+                return res.status(404).json({
+                    success: false,
+                    message: "задача не была найдена",
+                });
+            };
+
+            return res.status(200).json({
+                success: true,
+                message: "задача успешно обновлена",
+                todo: updatedTodo.toObject(),
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
 };
 
 export const todoController = new TodoController();

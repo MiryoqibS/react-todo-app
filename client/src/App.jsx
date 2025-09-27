@@ -73,6 +73,29 @@ export const App = () => {
     };
   };
 
+  // == Изменение задачи ==
+  const handleUpdate = async (id, newText, newDeadline) => {
+    const updatedTodos = todos.map((todo) => todo.id === id ? { ...todo, text: newText, deadline: newDeadline } : todo);
+    setTodos(updatedTodos);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTodos));
+
+    try {
+      const response = await fetch(`${API_URL}/todos/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          text: newText,
+          deadline: newDeadline,
+        }),
+      });
+      if (!response.ok) throw new Error("ошибка при изменении ошибки");
+    } catch (error) {
+      console.log(`Ошибка при изменении задачи: ${error.message}`);
+    };
+  }
+
   // == Проверка есть ли выполнение задачи ==
   const hasCompletedTodos = todos.some((todo) => todo.isCompleted);
 
@@ -145,6 +168,7 @@ export const App = () => {
           todos={todos}
           onDelete={setDeletingId}
           onToggleComplete={onToggleComplete}
+          onUpdate={handleUpdate}
         />
       </div>
       {/* Модальное окно для удаления задачи */}

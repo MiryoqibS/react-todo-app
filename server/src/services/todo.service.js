@@ -34,6 +34,16 @@ class TodoService {
         await todo.save();
         return todo;
     }
+
+    // == Обновление задачи==
+    async updateTodo(id, updatedFields) {
+        const todo = await TodoModel.findByIdAndUpdate(
+            id,
+            updatedFields,
+            { new: true, runValidators: true }
+        );
+        return todo;
+    }
 };
 
 export const todoService = new TodoService();
