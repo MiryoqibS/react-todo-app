@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { Input } from './UI/Input';
-import { PlusIcon } from 'lucide-react';
+import { DeadlineBlock } from './DeadlineBlock';
+import { AddButton } from './UI/AddButton';
+import { isValidTodo } from '../utils/validateTodo';
 
 export const AddTodo = ({ onAdd }) => {
     const [text, setText] = useState("");
@@ -8,7 +10,8 @@ export const AddTodo = ({ onAdd }) => {
     const [showDeadlineInput, setShowDeadlineInput] = useState(false);
 
     const handleAdd = () => {
-        if (text.trim().length <= 5) return;
+        const isValid = isValidTodo(text);
+        if (!isValid) return;
         onAdd(text, deadline);
         setDeadline("");
         setText("");
@@ -29,48 +32,16 @@ export const AddTodo = ({ onAdd }) => {
                     type="text"
                     placeholder="Введите названые задачи"
                 />
-                <button
-                    onClick={handleAdd}
-                    className="flex items-center justify-center p-3 cursor-pointer
-                bg-btn-light hover:bg-btn-light-hover text-text-light
-                dark:bg-btn-dark dark:hover:bg-btn-dark-hover dark:text-text-dark
-                "
-                >
-                    <PlusIcon />
-                </button>
+                <AddButton onClick={handleAdd} />
             </div>
 
-            {showDeadlineInput && (
-                <div className="flex items-center gap-2 mt-2">
-                    <Input
-                        type="datetime-local"
-                        value={deadline}
-                        handleChange={(e) => setDeadline(e.target.value)}
-                        className="border border-blue-500 rounded"
-                    />
-                    <button
-                        type="button"
-                        onClick={() => {
-                            setDeadline("");
-                            setShowDeadlineInput(false);
-                        }}
-                        className="p-2 text-gray-500 hover:text-gray-700 cursor-pointer transition-colors"
-                    >
-                        отмена
-                    </button>
-                </div>
-            )}
-            {!showDeadlineInput && (
-                <div className="mt-2">
-                    <button
-                        type="button"
-                        className="self-start text-xs text-blue-500 hover:text-blue-700 cursor-pointer transition-colors"
-                        onClick={() => setShowDeadlineInput(true)}
-                    >
-                        + добавить дедлайн
-                    </button>
-                </div>
-            )}
+            {/* Блок с выбором дедлайна */}
+            <DeadlineBlock
+                show={showDeadlineInput}
+                deadline={deadline}
+                setDeadline={setDeadline}
+                setShow={setShowDeadlineInput}
+            />
         </div>
     )
 };

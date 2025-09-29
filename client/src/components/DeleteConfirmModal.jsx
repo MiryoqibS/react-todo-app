@@ -1,7 +1,9 @@
 import React from 'react'
 import { Button } from './UI/Button'
 
-export const DeleteConfirmModal = ({ onCancel, onConfirm, message }) => {
+export const DeleteConfirmModal = ({ show, onCancel, onConfirm, message }) => {
+    if (!show) return null;
+
     return (
         <div className="fixed inset-0">
             <div className="absolute inset-0 bg-black/50 z-4 backdrop-blur-xs"></div>

@@ -1,0 +1,1 @@
+export const isValidTodo = (text) => text.trim().length > 5;
