@@ -9,7 +9,8 @@ export const TodoContent = ({
     onAdd,
     setDeletingId,
     onToggleComplete,
-    handleUpdate
+    handleUpdate,
+    onReorder
 }) => {
     const [filter, setFilter] = useState("all");
 
@@ -25,7 +26,7 @@ export const TodoContent = ({
     }, [todos, filter]);
 
     return (
-        <div className="mx-auto flex flex-col gap-3">
+        <div className="mx-auto flex flex-col gap-3 max-w-[650px]">
             <Header />
             <AddTodo onAdd={onAdd} />
             <TodoFilter
@@ -37,6 +38,7 @@ export const TodoContent = ({
                 onDelete={setDeletingId}
                 onToggleComplete={onToggleComplete}
                 onUpdate={handleUpdate}
+                onReorder={onReorder}
             />
         </div>
     )

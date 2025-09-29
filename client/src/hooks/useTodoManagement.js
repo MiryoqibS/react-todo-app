@@ -148,6 +148,42 @@ export const useTodoManagement = () => {
         };
     };
 
+    // == Изменения порядка задачи ==
+    const onReorder = async (activeId, overId) => {
+        if (!overId || !activeId) return;
+        const prevTodos = [...todos];
+
+        try {
+            const activeTodoIndex = todos.findIndex((todo) => todo.id === activeId);
+            const overTodoIndex = todos.findIndex((todo) => todo.id === overId);
+
+            if ([activeTodoIndex, overTodoIndex].includes(-1) || activeTodoIndex === overTodoIndex) return;
+            const newTodos = [...todos];
+            const [movedTodo] = newTodos.splice(activeTodoIndex, 1);
+            newTodos.splice(overTodoIndex, 0, movedTodo);
+
+            const updatedTodos = newTodos.map((todo, index) => ({
+                ...todo,
+                order: index + 1,
+            }));
+
+            setTodos(updatedTodos);
+
+            await fetch(`${API_URL}/todos/reorder`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(updatedTodos),
+            })
+
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTodos));
+        } catch (error) {
+            console.log(`Ошибка при перемещении задачи: ${error.message}`);
+            setTodos(prevTodos);
+        };
+    };
+
     return {
         todos,
         setTodos,
@@ -160,6 +196,7 @@ export const useTodoManagement = () => {
         handleDelete,
         hasCompletedTodos,
         confirmDeleteCompleted,
-        onToggleComplete
+        onToggleComplete,
+        onReorder,
     };
 };

@@ -35,7 +35,7 @@ class TodoService {
         return todo;
     }
 
-    // == Обновление задачи==
+    // == Обновление задачи ==
     async updateTodo(id, updatedFields) {
         const todo = await TodoModel.findByIdAndUpdate(
             id,
@@ -43,6 +43,18 @@ class TodoService {
             { new: true, runValidators: true }
         );
         return todo;
+    }
+
+    // == Изменение порядка задач ==
+    async reorderTodos(updatedTodos) {
+        const bulkOps = updatedTodos.map((todo) => ({
+            updateOne: {
+                filter: { _id: todo.id },
+                update: { order: todo.order },
+            },
+        }));
+
+        return await TodoModel.bulkWrite(bulkOps);
     }
 };
 

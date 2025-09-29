@@ -11,7 +11,7 @@ export const TodoFilter = ({ filter, setFilter }) => {
   }
 
   return (
-    <div className="w-full flex items-center gap-2">
+    <div className="w-full flex flex-col gap-2">
       <Button
         className={`${buttonClasses("all")}`}
         handleClick={() => setFilter("all")}

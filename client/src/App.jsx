@@ -22,6 +22,7 @@ export const App = () => {
     confirmDeleteCompleted,
     onToggleComplete,
     handleUpdate,
+    onReorder,
   } = useTodoManagement();
 
   return (
@@ -42,6 +43,7 @@ export const App = () => {
         setDeletingId={setDeletingId}
         onToggleComplete={onToggleComplete}
         handleUpdate={handleUpdate}
+        onReorder={onReorder}
       />
 
       {/* Модальное окно для удаления задачи */}

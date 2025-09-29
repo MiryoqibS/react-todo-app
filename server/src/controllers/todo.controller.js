@@ -61,7 +61,7 @@ class TodoController {
         }
     }
 
-    // == изменение задачи ==
+    // == Изменение задачи ==
     async updateTodo(req, res, next) {
         try {
             const id = req.params.id;
@@ -82,6 +82,29 @@ class TodoController {
         } catch (error) {
             next(error);
         }
+    }
+
+    // == Изменение порядка задач ==
+    async reorderTodos(req, res, next) {
+        try {
+            const updatedTodos = req.body;
+
+            if (!Array.isArray(updatedTodos)) {
+                return res.status(400).json({
+                    success: false,
+                    message: "нужен массив задач",
+                });
+            };
+
+            await todoService.reorderTodos(updatedTodos);
+
+            return res.status(200).json({
+                success: true,
+                message: "порядок задачи успешно обновлён"
+            });
+        } catch (error) {
+            next(error);
+        };
     }
 };
 
