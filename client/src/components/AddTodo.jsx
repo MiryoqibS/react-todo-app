@@ -4,7 +4,7 @@ import { DeadlineBlock } from './DeadlineBlock';
 import { AddButton } from './UI/AddButton';
 import { isValidTodo } from '../utils/validateTodo';
 
-export const AddTodo = ({ onAdd }) => {
+export const AddTodo = ({ onCreate }) => {
     const [text, setText] = useState("");
     const [deadline, setDeadline] = useState("");
     const [showDeadlineInput, setShowDeadlineInput] = useState(false);
@@ -12,7 +12,7 @@ export const AddTodo = ({ onAdd }) => {
     const handleAdd = () => {
         const isValid = isValidTodo(text);
         if (!isValid) return;
-        onAdd(text, deadline);
+        onCreate(text, deadline);
         setDeadline("");
         setText("");
         setShowDeadlineInput(false);

@@ -12,6 +12,7 @@ export const TodoList = memo(({
 }) => {
     const handleDragEnd = (event) => {
         const { over, active } = event;
+
         if (!over || active.id !== over.id) {
             onReorder(active.id, over?.id);
         };

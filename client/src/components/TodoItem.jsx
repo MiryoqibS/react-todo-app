@@ -64,7 +64,7 @@ export const TodoItem = memo(({ todo, onDelete, onToggleComplete, onUpdate }) =>
             {/* Блок для перетаскивания */}
             <div
                 {...listeners}
-                className="text-white cursor-grab active:cursor-grabbing"
+                className="text-gray-700 dark:text-white cursor-grab active:cursor-grabbing"
             >
                 <GripIcon size={16} />
             </div>

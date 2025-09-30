@@ -6,7 +6,7 @@ import { TodoFilter } from './TodoFilter';
 
 export const TodoContent = ({
     todos,
-    onAdd,
+    onCreate,
     setDeletingId,
     onToggleComplete,
     handleUpdate,
@@ -28,7 +28,7 @@ export const TodoContent = ({
     return (
         <div className="mx-auto flex flex-col gap-3 max-w-[650px]">
             <Header />
-            <AddTodo onAdd={onAdd} />
+            <AddTodo onCreate={onCreate} />
             <TodoFilter
                 filter={filter}
                 setFilter={setFilter}

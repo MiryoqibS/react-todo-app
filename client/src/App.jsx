@@ -12,17 +12,17 @@ export const App = () => {
 
   const {
     todos,
-    deletingId,
-    isDeletingCompleted,
-    hasCompletedTodos,
-    setDeletingId,
-    onAdd,
-    setIsDeletingCompleted,
-    handleDelete,
-    confirmDeleteCompleted,
-    onToggleComplete,
-    handleUpdate,
+    onCreate,
+    onDelete,
+    onDeleteCompleted,
+    onUpdate,
     onReorder,
+    onToggleComplete,
+    deletingId,
+    setDeletingId,
+    isDeletingCompleted,
+    setIsDeletingCompleted,
+    hasCompletedTodos,
   } = useTodoManagement();
 
   return (
@@ -39,17 +39,17 @@ export const App = () => {
       {/* Контент */}
       <TodoContent
         todos={todos}
-        onAdd={onAdd}
+        onCreate={onCreate}
         setDeletingId={setDeletingId}
         onToggleComplete={onToggleComplete}
-        handleUpdate={handleUpdate}
+        handleUpdate={onUpdate}
         onReorder={onReorder}
       />
 
       {/* Модальное окно для удаления задачи */}
       <DeleteConfirmModal
         onCancel={() => setDeletingId(null)}
-        onConfirm={() => handleDelete(deletingId)}
+        onConfirm={() => onDelete(deletingId)}
         show={deletingId}
         message="Вы уверены, что хотите удалить эту задачу?"
       />
@@ -57,7 +57,7 @@ export const App = () => {
       {/* Модальное окно для удаления всех выполненных задач */}
       <DeleteConfirmModal
         onCancel={() => setIsDeletingCompleted(false)}
-        onConfirm={confirmDeleteCompleted}
+        onConfirm={onDeleteCompleted}
         show={isDeletingCompleted}
         message={`Вы уверены, что хотите удалить все выполннение задачи (${todos.filter(todo => todo.isCompleted).length})?`}
       />
