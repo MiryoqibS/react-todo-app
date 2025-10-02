@@ -1,4 +1,5 @@
 import { TodoModel } from "../models/todo.model.js";
+import { ApiError } from "../errors/ApiError.js";
 
 class TodoService {
     // == Создание задачи ==
@@ -27,10 +28,20 @@ class TodoService {
         return deletedTodo;
     }
 
-    // == Отметить задачу ==
+    // == Отметить задачу как выполненная ==
     async toggleTodo(id) {
         const todo = await TodoModel.findById(id);
+        if (!todo) throw ApiError.BadRequestError();
         todo.isCompleted = !todo.isCompleted;
+        await todo.save();
+        return todo;
+    }
+
+    // == Отметить задачу как избранное =
+    async starTodo(id) {
+        const todo = await TodoModel.findById(id);
+        if (!todo) throw ApiError.BadRequestError();
+        todo.isStarred = !todo.isStarred;
         await todo.save();
         return todo;
     }

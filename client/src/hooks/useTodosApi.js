@@ -47,6 +47,15 @@ export const useTodosApi = () => {
         if (!response.ok) throw new Error("не правильные данные");
     };
 
+    // == Запрос для добавления задачи в избранные ==
+    const starTodo = async (id) => {
+        const response = await fetch(`${API_URL}/todos/${id}/star`, {
+            method: "PATCH",
+        });
+
+        if (!response.ok) throw new Error("не правильные данные");
+    };
+
     // == Запрос для удаления задачи ==
     const deleteTodo = async (id) => {
         const response = await fetch(`${API_URL}/todos/${id}`, {
@@ -75,6 +84,7 @@ export const useTodosApi = () => {
         deleteTodo,
         updateTodo,
         completeTodo,
+        starTodo,
         reorderTodos,
     };
 };

@@ -5,6 +5,10 @@ const todoSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    description: {
+        type: String,
+        default: "",
+    },
     isCompleted: {
         type: Boolean,
         default: false,
@@ -12,14 +16,14 @@ const todoSchema = new mongoose.Schema({
     deadline: {
         type: Date,
         default: null,
-        validate: {
-            validator: (value) => value === null || value > new Date(),
-            message: "Дедлайн должен быть в будущем"
-        },
     },
     order: {
         type: Number,
         required: true,
+    },
+    isStarred: {
+        type: Boolean,
+        default: false,
     },
 }, {
     timestamps: true,

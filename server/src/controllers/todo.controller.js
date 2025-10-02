@@ -1,4 +1,5 @@
 import { todoService } from "../services/todo.service.js";
+import { ApiError } from "../errors/ApiError.js";
 
 class TodoController {
     // == Создание задачи ==
@@ -65,8 +66,8 @@ class TodoController {
     async updateTodo(req, res, next) {
         try {
             const id = req.params.id;
-            const { text, deadline } = req.body;
-            const updatedTodo = await todoService.updateTodo(id, { text, deadline });
+            const { text, deadline, description } = req.body;
+            const updatedTodo = await todoService.updateTodo(id, { text, deadline, description });
             if (!updatedTodo) {
                 return res.status(404).json({
                     success: false,
@@ -101,6 +102,23 @@ class TodoController {
             return res.status(200).json({
                 success: true,
                 message: "порядок задачи успешно обновлён"
+            });
+        } catch (error) {
+            next(error);
+        };
+    }
+
+    // == Отметить задачу как избранную ==
+    async startTodo(req, res, next) {
+        try {
+            const id = req.params.id;
+            if (!id) throw ApiError.BadRequestError("идентификатор задачи не был передан");
+            const updatedTodo = await todoService.starTodo(id);
+
+            return res.status(200).json({
+                success: true,
+                message: "задача успешно добавлена в избранные",
+                todo: updatedTodo.toObject(),
             });
         } catch (error) {
             next(error);

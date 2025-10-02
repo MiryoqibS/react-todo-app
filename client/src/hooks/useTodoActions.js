@@ -14,6 +14,7 @@ export const useTodoActions = ({ todos, setTodos }) => {
         deleteTodo,
         updateTodo,
         completeTodo,
+        starTodo,
         reorderTodos,
     } = useTodosApi();
 
@@ -49,12 +50,13 @@ export const useTodoActions = ({ todos, setTodos }) => {
     };
 
     // == Изменение задачи ==
-    const onUpdate = async (id, newText, newDeadline) => {
+    const onUpdate = async (id, newText, newDeadline, newDescription) => {
         const updatedTodos = todos.map(
             (todo) => todo.id === id ? {
                 ...todo,
                 text: newText,
-                deadline: newDeadline
+                deadline: newDeadline,
+                description: newDescription,
             } : todo
         );
         setTodos(updatedTodos);
@@ -64,6 +66,7 @@ export const useTodoActions = ({ todos, setTodos }) => {
             await updateTodo(id, {
                 text: newText,
                 deadline: newDeadline,
+                description: newDescription,
             });
         } catch (error) {
             console.log(`Ошибка при изменении задачи: ${error.message}`);
@@ -75,8 +78,22 @@ export const useTodoActions = ({ todos, setTodos }) => {
         const updatedTodos = todos.map((todo) => todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo);
         setTodos(updatedTodos);
         setToLocalStorage(updatedTodos);
+
         try {
             await completeTodo(id);
+        } catch (error) {
+            console.log(`Ошибка при изменении задачи: ${error.message}`);
+        };
+    };
+
+    // == Отметить задачу как избранную ==
+    const onToggleStar = async (id) => {
+        const updatedTodos = todos.map((todo) => todo.id === id ? { ...todo, isStarred: !todo.isStarred } : todo);
+        setTodos(updatedTodos);
+        setToLocalStorage(updatedTodos);
+
+        try {
+            await starTodo(id);
         } catch (error) {
             console.log(`Ошибка при изменении задачи: ${error.message}`);
         };
@@ -151,6 +168,7 @@ export const useTodoActions = ({ todos, setTodos }) => {
         onDeleteCompleted,
         onUpdate,
         onToggleComplete,
+        onToggleStar,
         onReorder,
     };
 }

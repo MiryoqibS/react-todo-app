@@ -3,7 +3,6 @@ import { Input } from './UI/Input';
 import { DeadlineBlock } from './DeadlineBlock';
 import { AddButton } from './UI/AddButton';
 import { isValidTodo } from '../utils/validateTodo';
-import { Button } from "./UI/Button";
 import { MicIcon } from 'lucide-react';
 import { SoundWaves } from './UI/SoundWaves';
 
@@ -95,6 +94,7 @@ export const AddTodo = ({ onCreate }) => {
                     type="text"
                     placeholder="Введите названые задачи"
                 />
+
                 <button
                     onClick={toggleListening}
                     className={`p-0 flex items-center justify-center w-14 px-2 
@@ -103,7 +103,12 @@ export const AddTodo = ({ onCreate }) => {
                     `}>
                     {isListening ? <SoundWaves /> : <MicIcon size={20} />}
                 </button>
-                <AddButton onClick={handleAdd} />
+
+                <AddButton
+                    className={`${isListening ? "!cursor-not-allowed !bg-gray-600" : ""}`}
+                    disabled={isListening}
+                    onClick={handleAdd}
+                />
             </div>
 
             {/* Блок с выбором дедлайна */}
@@ -113,6 +118,13 @@ export const AddTodo = ({ onCreate }) => {
                 setDeadline={setDeadline}
                 setShow={setShowDeadlineInput}
             />
+
+            {isListening && (
+                <div className="mt-2 flex items-center gap-2">
+                    <span className="w-3 h-3 rounded-full bg-red-700 animate-pulse"></span>
+                    <span className="text-xs text-gray-800 font-medium dark:text-gray-200">Идёт запись... Нажмите повторно что-бы остановить</span>
+                </div>
+            )}
         </div>
     )
 };

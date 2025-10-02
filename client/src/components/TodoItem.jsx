@@ -4,14 +4,16 @@ import { TodoView } from './TodoView';
 import { DeleteButton } from './UI/DeleteButton';
 import { CheckboxButton } from './UI/CheckboxButton';
 import { useSortable } from '@dnd-kit/sortable';
-import { GripIcon } from 'lucide-react';
+import { GripIcon, StarIcon } from 'lucide-react';
+import { Button } from './UI/Button';
 
-export const TodoItem = memo(({ todo, onDelete, onToggleComplete, onUpdate }) => {
-    const { text, isCompleted, deadline, id } = todo;
+export const TodoItem = memo(({ todo, onDelete, onToggleComplete, onToggleStar, onUpdate }) => {
+    const { text, isCompleted, deadline, id, isStarred, description } = todo;
     const editFormRef = useRef(null);
     const [isEditing, setIsEditing] = useState(false);
     const [editText, setEditText] = useState(text);
     const [editDeadline, setEditDeadline] = useState(deadline || "");
+    const [editDescription, setEditDescription] = useState(description || "");
 
     const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
         id,
@@ -28,11 +30,11 @@ export const TodoItem = memo(({ todo, onDelete, onToggleComplete, onUpdate }) =>
 
     const handleSave = useCallback(() => {
         if (editText.trim()) {
-            onUpdate(id, editText, editDeadline);
+            onUpdate(id, editText, editDeadline, editDescription);
         };
 
         setIsEditing(false);
-    }, [editText, editDeadline, id, onUpdate]);
+    }, [editText, editDeadline, editDescription, id, onUpdate]);
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -82,8 +84,10 @@ export const TodoItem = memo(({ todo, onDelete, onToggleComplete, onUpdate }) =>
                         formRef={editFormRef}
                         text={editText}
                         deadline={editDeadline}
+                        description={editDescription}
                         onTextChange={setEditText}
                         onDeadlineChange={setEditDeadline}
+                        onDescriptionChange={setEditDescription}
                         handleSave={handleSave}
                     />)
                     :
@@ -94,10 +98,23 @@ export const TodoItem = memo(({ todo, onDelete, onToggleComplete, onUpdate }) =>
                 }
             </div>
 
-            <DeleteButton
-                className="ml-auto"
-                onClick={onDelete}
-            />
+            <div className="flex flex-col items-center gap-2 justify-between">
+                <DeleteButton
+                    className="ml-auto"
+                    onClick={onDelete}
+                />
+
+                <button
+                    onClick={onToggleStar}
+                    className={`
+                        flex items-center justify-center
+                        ${isStarred ? "!text-yellow-500 hover:text-yellow-700" : "opacity-0 group-hover:opacity-100"} cursor-pointer transition-all duration-300 
+                        text-gray-700 hover:text-yellow-700 dark:text-gray-200`
+                    }
+                >
+                    <StarIcon size={16} />
+                </button>
+            </div>
         </div>
     )
 });

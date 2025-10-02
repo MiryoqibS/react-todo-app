@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React, { lazy, Suspense, useState } from 'react'
 import { ToggleTheme } from './components/ToggleTheme';
 import { getInitialTheme } from './helpers/getInitialTheme';
 import { toggleTheme } from './helpers/toggleTheme';
 import { DeleteConfirmModal } from './components/DeleteConfirmModal';
 import { useTodoManagement } from './hooks/useTodoManagement';
 import { DeleteCompletedButton } from './components/DeleteCompletedButton';
-import { TodoContent } from './components/TodoContent';
+import { Loader } from './components/Loader';
+
+// Ленивая загрузка
+const TodoContent = lazy(() => import("./components/TodoContent"));
 
 export const App = () => {
   const [theme, setTheme] = useState(getInitialTheme());
@@ -18,6 +21,7 @@ export const App = () => {
     onUpdate,
     onReorder,
     onToggleComplete,
+    onToggleStar,
     deletingId,
     setDeletingId,
     isDeletingCompleted,
@@ -37,20 +41,23 @@ export const App = () => {
       />
 
       {/* Контент */}
-      <TodoContent
-        todos={todos}
-        onCreate={onCreate}
-        setDeletingId={setDeletingId}
-        onToggleComplete={onToggleComplete}
-        handleUpdate={onUpdate}
-        onReorder={onReorder}
-      />
+      <Suspense fallback={<Loader />}>
+        <TodoContent
+          todos={todos}
+          onCreate={onCreate}
+          setDeletingId={setDeletingId}
+          onToggleComplete={onToggleComplete}
+          handleUpdate={onUpdate}
+          onReorder={onReorder}
+          onToggleStar={onToggleStar}
+        />
+      </Suspense>
 
       {/* Модальное окно для удаления задачи */}
       <DeleteConfirmModal
         onCancel={() => setDeletingId(null)}
         onConfirm={() => onDelete(deletingId)}
-        show={deletingId}
+        show={!!deletingId}
         message="Вы уверены, что хотите удалить эту задачу?"
       />
 
@@ -58,7 +65,7 @@ export const App = () => {
       <DeleteConfirmModal
         onCancel={() => setIsDeletingCompleted(false)}
         onConfirm={onDeleteCompleted}
-        show={isDeletingCompleted}
+        show={!!isDeletingCompleted}
         message={`Вы уверены, что хотите удалить все выполннение задачи (${todos.filter(todo => todo.isCompleted).length})?`}
       />
 

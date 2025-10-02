@@ -6,8 +6,10 @@ export const TodoEditForm = ({
     formRef,
     text,
     deadline,
+    description,
     onTextChange,
     onDeadlineChange,
+    onDescriptionChange,
     handleSave
 }) => {
     return (
@@ -20,6 +22,15 @@ export const TodoEditForm = ({
                 value={text}
                 handleChange={(e) => onTextChange(e.target.value)}
                 placeholder="Новый заголовок задачи..."
+                onKeyDown={(e) => e.key === "Enter" && handleSave()}
+                className="border-2 border-blue-600 rounded-lg text-sm text-gray-700 dark:text-gray-300"
+            />
+
+            <Input
+                type="text"
+                value={description}
+                handleChange={(e) => onDescriptionChange(e.target.value)}
+                placeholder="Новое описание задачи..."
                 onKeyDown={(e) => e.key === "Enter" && handleSave()}
                 className="border-2 border-blue-600 rounded-lg text-sm text-gray-700 dark:text-gray-300"
             />

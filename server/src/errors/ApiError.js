@@ -1,4 +1,4 @@
-class ApiError extends Error {
+export class ApiError extends Error {
     constructor(statusCode, message, errors = []) {
         super(message);
         this.statusCode = statusCode;
@@ -8,4 +8,4 @@ class ApiError extends Error {
     static BadRequestError(message, errors = []) {
         return new ApiError(400, message, errors);
     }
-}
+};

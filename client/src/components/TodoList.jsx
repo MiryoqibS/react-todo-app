@@ -9,6 +9,7 @@ export const TodoList = memo(({
     onToggleComplete,
     onUpdate,
     onReorder,
+    onToggleStar,
 }) => {
     const handleDragEnd = (event) => {
         const { over, active } = event;
@@ -35,6 +36,7 @@ export const TodoList = memo(({
                             onDelete={() => onDelete(todo.id)}
                             onToggleComplete={() => onToggleComplete(todo.id)}
                             onUpdate={onUpdate}
+                            onToggleStar={() => onToggleStar(todo.id)}
                         />
                     ))}
                 </div>
